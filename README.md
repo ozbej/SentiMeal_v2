@@ -6,7 +6,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 1. Navigate into project root (`...\sentimeal-app\`)
 2. Install required packages with `npm install`
 3. Navigate to api folder with `cd api`
-4. Install required packages with `pip install flask python-dotenv`
+4. Install required packages with `pip install -r requirements.txt`
 
 ## Run project
 ### Run frontend server
