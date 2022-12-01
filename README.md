@@ -4,7 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Project setup
 1. Navigate into project root (`...\sentimeal-app\`)
-2. Install required packages with `npm install`
+2. Install required packages with `npm install -g npm` from cmd
 3. Navigate to api folder with `cd api`
 4. Install required packages with `pip install -r requirements.txt`
 
