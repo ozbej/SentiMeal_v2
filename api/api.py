@@ -25,6 +25,8 @@ def reviews_by_id():
 				"text": review.text,
 				"date": review.date,
 				"sentiment": review.sentiment,
+				"prob_neg": review.prob_neg,
+				"prob_pos": review.prob_pos,
 			}
 		)
 

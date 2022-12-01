@@ -20,5 +20,7 @@ CREATE TABLE reviews (
     text TEXT,
     date TEXT,
     sentiment TEXT,
+    prob_neg TEXT,
+    prob_pos TEXT,
     FOREIGN KEY (id_restaurant) REFERENCES restaurants(business_id)
 );

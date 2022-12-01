@@ -8,7 +8,7 @@ with open('schema.sql') as f:
 
 cur = connection.cursor()
 
-df = pd.read_csv('data/yelp_reviews_restaurants_sampled_15000.csv')
+df = pd.read_csv('data/yelp_reviews_restaurants_test.csv')
 
 # Insert into "restaurants" table
 df_groups = df.groupby("business_id")
@@ -18,8 +18,8 @@ for name, group in df_groups:
             )
 
 for i, row in df.iterrows():
-    cur.execute("INSERT INTO reviews (id_restaurant, stars, text, date, sentiment) VALUES (?, ?, ?, ?, ?)",
-            (row["business_id"], row["review_stars"], row["text"], row["date"], row["sentiment"])
+    cur.execute("INSERT INTO reviews (id_restaurant, stars, text, date, sentiment, prob_neg, prob_pos) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            (row["business_id"], row["review_stars"], row["text"], row["date"], row["sentiment"], row["prob_neg"], row["prob_pos"])
             )
 
 connection.commit()

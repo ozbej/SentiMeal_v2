@@ -23,6 +23,8 @@ class Review(db.Model):
     text = db.Column(db.Text, nullable=True)
     date = db.Column(db.Text, nullable=True)
     sentiment = db.Column(db.Text, nullable=True)
+    prob_neg = db.Column(db.Text, nullable=True)
+    prob_pos = db.Column(db.Text, nullable=True)
 
 
 # Generate marshmallow Schemas from your models

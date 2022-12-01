@@ -1,11 +1,10 @@
 import { useState, useEffect, React } from 'react';
-import ReviewList from '../components/ReviewList';
 import {useLocation} from 'react-router-dom';
-import { Col, Row, Divider, Rate } from 'antd';
+import { Col, Row, Rate } from 'antd';
 
 function Dashboard() {
 
-    const [reviews, setReviews] = useState([]);
+    const [restaurant, setRestaurant] = useState([]);
 
     const location = useLocation();
 
@@ -17,7 +16,7 @@ function Dashboard() {
           }
         })
         .then(response => response.json())
-        .then(response => setReviews(response))
+        .then(response => setRestaurant(response))
         .catch(error => console.log(error))
     
       },[])
@@ -27,7 +26,7 @@ function Dashboard() {
         <Row>
           <Col span={8} />
           <Col span={8} style={{display:"flex", flexDirection:"row", justifyContent:"space-evenly", alignItems:"center"}}>
-            <h1 style={{textAlign:"center"}}>{reviews.name}</h1>
+            <h1 style={{textAlign:"center"}}>{restaurant.name}</h1>
           </Col>
         </Row>
         <Row>
@@ -35,11 +34,11 @@ function Dashboard() {
             <Row>
               <Col span={12} style={{textAlign:"center"}}>
                 <h2>Restaurant rating</h2>
-                <Rate disabled defaultValue={reviews.stars} />
+                <Rate disabled value={restaurant.stars} />
               </Col>
               <Col span={12} style={{textAlign:"center"}}>
                 <h2>Total reviews</h2>
-                <h2>{reviews.reviews.length}</h2>
+                <h2>{restaurant.reviews != undefined ? restaurant.reviews.length : 0}</h2>
               </Col>
             </Row>
           </Col>
