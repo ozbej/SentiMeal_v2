@@ -1,11 +1,18 @@
 import React from 'react';
 import { Col, Row, Divider, Input } from 'antd';
+import  { Navigate, useNavigate  } from 'react-router-dom';
 
 const { Search } = Input;
 
-const onSearch = (value) => console.log(value);
-
 function SearchPage() {
+
+    const navigate = useNavigate();
+
+    const onSearch = (value) => {
+        console.log(value);
+        navigate('/dashboard', {state:{business_id:value}});
+    };
+
     return (
         <>
             <Row>

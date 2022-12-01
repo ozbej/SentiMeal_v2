@@ -10,9 +10,16 @@ cur = connection.cursor()
 
 df = pd.read_csv('data/yelp_reviews_restaurants_sampled_15000.csv')
 
+# Insert into "restaurants" table
+df_groups = df.groupby("business_id")
+for name, group in df_groups:
+    cur.execute("INSERT INTO restaurants (business_id, name, address, city, state, postal_code, latitude, longitude, stars) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (group.iloc[0]["business_id"], group.iloc[0]["name"], group.iloc[0]["address"], group.iloc[0]["city"], group.iloc[0]["state"], group.iloc[0]["postal_code"], group.iloc[0]["latitude"], group.iloc[0]["longitude"], group.iloc[0]["stars"])
+            )
+
 for i, row in df.iterrows():
-    cur.execute("INSERT INTO reviews (business_id, business_name, business_address, business_city, business_state, business_postal_code, business_latitude, business_longitude, business_stars, review_stars, review_text, review_date, review_sentiment) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            (row["business_id"], row["name"], row["address"], row["city"], row["state"], row["postal_code"], row["latitude"], row["longitude"], row["stars"], row["review_stars"], row["text"], row["date"], row["sentiment"])
+    cur.execute("INSERT INTO reviews (id_restaurant, stars, text, date, sentiment) VALUES (?, ?, ?, ?, ?)",
+            (row["business_id"], row["review_stars"], row["text"], row["date"], row["sentiment"])
             )
 
 connection.commit()

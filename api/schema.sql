@@ -1,18 +1,24 @@
+DROP TABLE IF EXISTS restaurants;
 DROP TABLE IF EXISTS reviews;
 
+CREATE TABLE restaurants (
+    business_id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    address TEXT,
+    city TEXT,
+    state TEXT,
+    postal_code TEXT,
+    latitude TEXT,
+    longitude TEXT,
+    stars TEXT
+);
+
 CREATE TABLE reviews (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    business_id TEXT NOT NULL,
-    business_name TEXT NOT NULL,
-    business_address TEXT,
-    business_city TEXT,
-    business_state TEXT,
-    business_postal_code TEXT,
-    business_latitude TEXT,
-    business_longitude TEXT,
-    business_stars INTEGER,
-    review_stars INTEGER,
-    review_text TEXT,
-    review_date TEXT,
-    review_sentiment TEXT
+    id_review INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_restaurant TEXT,
+    stars TEXT,
+    text TEXT,
+    date TEXT,
+    sentiment TEXT,
+    FOREIGN KEY (id_restaurant) REFERENCES restaurants(business_id)
 );
