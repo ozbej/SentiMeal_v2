@@ -4,7 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Project setup
 1. Navigate into project root (`...\sentimeal-app\`)
-2. Install required packages with `npm install -g npm` from cmd
+2. Install required packages with `npm install` or `npm install -g npm` from cmd and then `rm -rf node_modules` & `npm install` in git bash
 3. Navigate to api folder with `cd api`
 4. Install required packages with `pip install -r requirements.txt`
 
@@ -16,4 +16,4 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ### Run backend server
 3. Navigate into project root (`...\sentimeal-app\`)
-2. Run `yarn start-api` to run the flask server.
+2. Run `yarn start-api` to run the flask server. Alternatively navigate to `...\api\` and run `python -m flask run --no-debugger`
