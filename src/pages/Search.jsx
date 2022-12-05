@@ -1,5 +1,5 @@
-import React from 'react';
-import { Col, Row, Input } from 'antd';
+import { useEffect, React, useState } from 'react';
+import { Col, Row, Input, Select, Spin } from 'antd';
 import  { useNavigate  } from 'react-router-dom';
 
 const { Search } = Input;
@@ -8,31 +8,65 @@ function SearchPage() {
 
     const navigate = useNavigate();
 
+    const [restaurants, setRestaurants] = useState([]);
+
     const onSearch = (value) => {
         console.log(value);
         navigate('/dashboard', {state:{business_id:value}});
     };
 
+    useEffect(()=>{
+        fetch("http://localhost:5000/restaurants",{
+          'methods':'GET',
+          headers : {
+            'Content-Type':'application/json'
+          }
+        })
+        .then(response => response.json())
+        .then(response => {
+            let restaurantArr = [];
+            response && response.map((restaurant, index) => restaurantArr.push({
+                value: restaurant.business_id,
+                label: restaurant.name
+            }))
+
+            setRestaurants(restaurantArr)
+            console.log(restaurantArr)
+        })
+        .catch(error => console.log(error))
+      },[])
+
     return (
         <>
-            <Row>
-                <Col span={24}>
-                    <h1 style={{textAlign:"center"}}>Find your restaurant:</h1>
-                </Col>
-            </Row>
-            <Row>
-                <Col span={9}></Col>
-                <Col span={6} style={{textAlign:"center"}}>
-                    <Search
-                    placeholder="Input business ID"
-                    allowClear
-                    enterButton="Search"
-                    size="large"
-                    onSearch={onSearch}
+            {restaurants ? (
+            <>
+                <Row>
+                    <Col span={24}>
+                        <h1 style={{textAlign:"center"}}>Find your restaurant:</h1>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={9}></Col>
+                    <Col span={6} style={{textAlign:"center"}}>
+                    <Select
+                        showSearch
+                        size="large"
+                        placeholder="Select a restaurant"
+                        optionFilterProp="children"
+                        onChange={onSearch}
+                        onSearch={onSearch}
+                        filterOption={(input, option) =>
+                        (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                        }
+                        options={restaurants ? restaurants : []}
+                        style={{width:"100%"}}
                     />
-                </Col>
-                <Col span={9}></Col>
-            </Row>
+                    </Col>
+                    <Col span={9}></Col>
+                </Row>
+                </>
+            ) : 
+            <Col span={24} style={{display: "flex", justifyContent: "center", alignItems: "center", height: "20em"}}><Spin /></Col>}
         </>
     );
 }

@@ -12,6 +12,16 @@ nltk.download("punkt")
 # Create an application instance
 app = create_app()
 
+# Define a route to fetch the avaialable articles
+@app.route("/restaurants", methods=["GET"], strict_slashes=False)
+def restaurants_all():
+	restaurants = Restaurant.query.all()
+	results = reviews_schema.dump(restaurants)
+	
+	for result in results:
+		result["reviews"] = None
+
+	return jsonify(results)
 
 @app.route("/reviews", methods=["GET"], strict_slashes=False)
 def reviews_by_id():

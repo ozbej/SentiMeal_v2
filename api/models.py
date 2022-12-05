@@ -28,16 +28,16 @@ class Review(db.Model):
 
 
 # Generate marshmallow Schemas from your models
-class RestaurantsShema(ma.Schema):
+class ReviewsAllSchema(ma.Schema):
     class Meta:
         fields = ("business_id", "name", "address", "city", "state", "postal_code", "latitude", "longitude", "stars", "reviews")
 
-class ReviewsShema(ma.Schema):
+class RestaurantsAllSchema(ma.Schema):
     class Meta:
-        fields = ("id_restaurant", "stars", "text", "date", "sentiment")
+        fields = ("business_id", "name", "address", "city", "state", "postal_code", "latitude", "longitude", "stars")
 
-restaurant_schema = RestaurantsShema()
-restaurants_schema = RestaurantsShema(many=True)
+review_schema = ReviewsAllSchema()
+reviews_schema = ReviewsAllSchema(many=True)
 
-review_schema = RestaurantsShema()
-reviews_schema = RestaurantsShema(many=True)
+restaurant_schema = RestaurantsAllSchema()
+restaurants_schema = RestaurantsAllSchema(many=True)

@@ -1,6 +1,6 @@
 import { useState, useEffect, React } from 'react';
 import {useLocation} from 'react-router-dom';
-import { Col, Row, Rate, Divider, Select } from 'antd';
+import { Col, Row, Rate, Divider, Select, Spin } from 'antd';
 import ReactWordcloud from 'react-wordcloud';
 import { StarFilled } from '@ant-design/icons';
 import { BarChart, Bar, CartesianGrid, XAxis, YAxis, Cell, PieChart, Pie, Legend } from 'recharts';
@@ -43,7 +43,7 @@ function Dashboard() {
     transitionDuration: 1000
   };
 
-  const [restaurant, setRestaurant] = useState([]);
+  const [restaurant, setRestaurant] = useState(undefined);
   const [reviewCount, setReviewCount] = useState([
     {name: '1', number: 0, percentage: 0, color: "#E26868"},
     {name: '2', number: 0, percentage: 0, color: "#FF8787"},
@@ -136,110 +136,115 @@ function Dashboard() {
 
   return (
     <>
-      <Row style={{display:"flex", flexDirection:"row", justifyContent:"space-evenly", alignItems:"center"}}>
-          <h1 style={{textAlign:"center"}}>{restaurant.name}</h1>
-      </Row>
-      <Divider style={{margin: 0}} />
-      <Row>
-        <Col span={8} style={{borderRight:"1px solid #F0F0F0", alignContent: "center"}}>
-          <Row>
-            <Col span={12} style={{textAlign:"center"}}>
-              <h2>Restaurant rating</h2>
-              <Rate disabled allowHalf value={parseFloat(restaurant.stars)} />
-            </Col>
-            <Col span={12} style={{textAlign:"center"}}>
-              <h2>Total reviews</h2>
-              <h2>{restaurant.reviews !== undefined ? restaurant.reviews.length : 0}</h2>
-            </Col>
-          </Row>
-          <Divider style={{marginTop: 2}} />
-          <Row style={{display: "flex", alignItems: "center"}}>
-            Sort reviews by:
-            <Select
-              defaultValue="positive"
-              style={{ width: 200, marginLeft: 10 }}
-              onChange={sortReviews}
-              options={[
-                {
-                  value: 'positive',
-                  label: 'Most positive',
-                },
-                {
-                  value: 'negative',
-                  label: 'Most negative',
-                }
-              ]}
-            />
-          </Row>
-          <Row style={{padding: "5px", marginRight: "1em"}}>
-          <Col span={16} style={{display: "flex", alignItems: "center"}}>
-            <b>Review text</b>
-          </Col>
-          <Col span={2} style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
-            <StarFilled style={{color: "#F8DE0B"}} />
-          </Col>
-          <Col span={3} style={{display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center"}}>
-            <b>POS Prob.</b>
-          </Col>
-          <Col span={3} style={{display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center"}}>
-            <b>NEG Prob.</b>
-          </Col>
-          <Divider style={{margin: 2}} />
+      {restaurant ? (
+        <>
+        <Row style={{display:"flex", flexDirection:"row", justifyContent:"space-evenly", alignItems:"center"}}>
+            <h1 style={{textAlign:"center"}}>{restaurant.name}</h1>
         </Row>
-          <Row>
-            <Col span={24} style={{maxHeight: "400px", overflowY: "scroll", scrollbarWidth: "qem"}}>
-              {restaurant && restaurant.reviews && restaurant.reviews.map((review) => <Review review={review} />)}
+        <Divider style={{margin: 0}} />
+        <Row>
+          <Col span={8} style={{borderRight:"1px solid #F0F0F0", alignContent: "center"}}>
+            <Row>
+              <Col span={12} style={{textAlign:"center"}}>
+                <h2>Restaurant rating</h2>
+                <Rate disabled allowHalf value={parseFloat(restaurant.stars)} />
+              </Col>
+              <Col span={12} style={{textAlign:"center"}}>
+                <h2>Total reviews</h2>
+                <h2>{restaurant.reviews !== undefined ? restaurant.reviews.length : 0}</h2>
+              </Col>
+            </Row>
+            <Divider style={{marginTop: 2}} />
+            <Row style={{display: "flex", alignItems: "center"}}>
+              Sort reviews by:
+              <Select
+                defaultValue="positive"
+                style={{ width: 200, marginLeft: 10 }}
+                onChange={sortReviews}
+                options={[
+                  {
+                    value: 'positive',
+                    label: 'Most positive',
+                  },
+                  {
+                    value: 'negative',
+                    label: 'Most negative',
+                  }
+                ]}
+              />
+            </Row>
+            <Row style={{padding: "5px", marginRight: "1em"}}>
+            <Col span={16} style={{display: "flex", alignItems: "center"}}>
+              <b>Review text</b>
             </Col>
+            <Col span={2} style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
+              <StarFilled style={{color: "#F8DE0B"}} />
+            </Col>
+            <Col span={3} style={{display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center"}}>
+              <b>POS Prob.</b>
+            </Col>
+            <Col span={3} style={{display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center"}}>
+              <b>NEG Prob.</b>
+            </Col>
+            <Divider style={{margin: 2}} />
           </Row>
-        </Col>
-        <Col span={8} style={{borderRight:"1px solid #F0F0F0", alignContent: "center"}}>
-          <Row style={{display: "flex", justifyContent: "center", alignItems:"center"}}>
-            <h3>Ratings</h3>
-          </Row>
-          <Row style={{display: "flex", justifyContent: "center", alignItems:"center"}}>
-            <BarChart width={400} height={200} data={reviewCount}>
-              <Bar dataKey="number">
-                {reviewCount.map((entry, index) => (
-                  <Cell fill={reviewCount[index].color} />
-                ))}
-              </Bar>
-              <CartesianGrid stroke="#ccc" />
-              <XAxis dataKey="name" />
-              <YAxis />
-            </BarChart>
-          </Row>
-          <Row style={{display: "flex", justifyContent: "center", alignItems:"center"}}>
-            <PieChart width={200} height={300}>
-              <Pie
-                data={reviewCount}
-                color="#000000"
-                dataKey="percentage"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                outerRadius={100}
-                fill="#8884d8"
-              >
-                {reviewCount.map((entry, index) => (
+            <Row>
+              <Col span={24} style={{maxHeight: "400px", overflowY: "scroll", scrollbarWidth: "qem"}}>
+                {restaurant && restaurant.reviews && restaurant.reviews.map((review) => <Review review={review} />)}
+              </Col>
+            </Row>
+          </Col>
+          <Col span={8} style={{borderRight:"1px solid #F0F0F0", alignContent: "center"}}>
+            <Row style={{display: "flex", justifyContent: "center", alignItems:"center"}}>
+              <h3>Ratings</h3>
+            </Row>
+            <Row style={{display: "flex", justifyContent: "center", alignItems:"center"}}>
+              <BarChart width={400} height={200} data={reviewCount}>
+                <Bar dataKey="number">
+                  {reviewCount.map((entry, index) => (
                     <Cell fill={reviewCount[index].color} />
-                ))}
-              </Pie>
-              <Legend formatter={(value, entry) => <span style={{color: "black"}}>{value}</span>}/>
-            </PieChart>
-          </Row>
-         </Col>
-         <Col span={8} style={{alignContent: "center"}}>
-          <Row style={{display: "flex", justifyContent: "center", alignItems:"center"}}>
-            <h3>Word clouds</h3>
-          </Row>
-          <Row>
-            <ReactWordcloud words={restaurant.reviews !== undefined ? restaurant.counts_positive : []} options={wordcloudOptionsPositive} />
-          </Row>
-          <Row>
-            <ReactWordcloud words={restaurant.reviews !== undefined ? restaurant.counts_positive : []} options={wordcloudOptionsNegative} />
-          </Row>
-        </Col>
-      </Row>
+                  ))}
+                </Bar>
+                <CartesianGrid stroke="#ccc" />
+                <XAxis dataKey="name" />
+                <YAxis />
+              </BarChart>
+            </Row>
+            <Row style={{display: "flex", justifyContent: "center", alignItems:"center"}}>
+              <PieChart width={200} height={300}>
+                <Pie
+                  data={reviewCount}
+                  color="#000000"
+                  dataKey="percentage"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={100}
+                  fill="#8884d8"
+                >
+                  {reviewCount.map((entry, index) => (
+                      <Cell fill={reviewCount[index].color} />
+                  ))}
+                </Pie>
+                <Legend formatter={(value, entry) => <span style={{color: "black"}}>{value}</span>}/>
+              </PieChart>
+            </Row>
+          </Col>
+          <Col span={8} style={{alignContent: "center"}}>
+            <Row style={{display: "flex", justifyContent: "center", alignItems:"center"}}>
+              <h3>Word clouds</h3>
+            </Row>
+            <Row>
+              <ReactWordcloud words={restaurant.reviews !== undefined ? restaurant.counts_positive : []} options={wordcloudOptionsPositive} />
+            </Row>
+            <Row>
+              <ReactWordcloud words={restaurant.reviews !== undefined ? restaurant.counts_negative : []} options={wordcloudOptionsNegative} />
+            </Row>
+          </Col>
+        </Row>
+      </>
+      ) : 
+      <Col span={24} style={{display: "flex", justifyContent: "center", alignItems: "center", height: "20em"}}><Spin /></Col>}
     </>
   );
 }
