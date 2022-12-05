@@ -143,7 +143,7 @@ function Dashboard() {
         </Row>
         <Divider style={{margin: 0}} />
         <Row>
-          <Col span={8} style={{borderRight:"1px solid #F0F0F0", alignContent: "center"}}>
+          <Col xs={24} sm={24} md={8} lg={8} xl={8} style={{borderRight:"1px solid #F0F0F0", alignContent: "center"}}>
             <Row>
               <Col span={12} style={{textAlign:"center"}}>
                 <h2>Restaurant rating</h2>
@@ -194,7 +194,7 @@ function Dashboard() {
               </Col>
             </Row>
           </Col>
-          <Col span={8} style={{borderRight:"1px solid #F0F0F0", alignContent: "center"}}>
+          <Col xs={24} sm={24} md={8} lg={8} xl={8} style={{borderRight:"1px solid #F0F0F0", alignContent: "center"}}>
             <Row style={{display: "flex", justifyContent: "center", alignItems:"center"}}>
               <h3>Ratings</h3>
             </Row>
@@ -230,7 +230,7 @@ function Dashboard() {
               </PieChart>
             </Row>
           </Col>
-          <Col span={8} style={{alignContent: "center"}}>
+          <Col xs={24} sm={24} md={8} lg={8} xl={8} style={{alignContent: "center"}}>
             <Row style={{display: "flex", justifyContent: "center", alignItems:"center"}}>
               <h3>Word clouds</h3>
             </Row>
