@@ -40,6 +40,9 @@ function SearchPage() {
         <>
             {restaurants ? (
             <>
+                <Row style={{display: "flex", justifyContent:"center"}}>
+                    <img src={process.env.PUBLIC_URL + '/restaurant-vector.jpg'} width="30%"/> 
+                </Row>
                 <Row>
                     <Col span={24}>
                         <h1 style={{textAlign:"center"}}>Find your restaurant:</h1>
