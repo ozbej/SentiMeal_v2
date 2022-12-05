@@ -1,15 +1,16 @@
 from flask import current_app, jsonify, request
 from app import create_app, db
 from models import Restaurant, reviews_schema
-from nltk.corpus import stopwords
+import nltk
 from nltk.tokenize import word_tokenize
 import string
 from collections import Counter
 
+nltk.download("stopwords")
+
 # Create an application instance
 app = create_app()
 
-# Define a route to fetch the avaialable articles
 
 @app.route("/reviews", methods=["GET"], strict_slashes=False)
 def reviews_by_id():
@@ -19,7 +20,7 @@ def reviews_by_id():
 	reviews = Restaurant.query.filter_by(business_id=business_id)
 	results = reviews_schema.dump(reviews)[0]
 
-	stop_words = set(stopwords.words('english'))
+	stop_words = set(nltk.corpus.stopwords.words('english'))
 	stop_words.update(["n't", "'s"])
 
 	negative_text = []
