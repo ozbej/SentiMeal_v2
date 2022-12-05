@@ -1,6 +1,6 @@
 import React from 'react';
-import { Col, Row, Divider, Input } from 'antd';
-import  { Navigate, useNavigate  } from 'react-router-dom';
+import { Col, Row, Input } from 'antd';
+import  { useNavigate  } from 'react-router-dom';
 
 const { Search } = Input;
 

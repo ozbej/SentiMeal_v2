@@ -1,9 +1,5 @@
 import React from 'react';
-import { Col, Row, Divider, Input } from 'antd';
-
-const { Search } = Input;
-
-const onSearch = (value) => console.log(value);
+import { Col, Row } from 'antd';
 
 function Home() {
     return (

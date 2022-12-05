@@ -3,7 +3,7 @@ import {useLocation} from 'react-router-dom';
 import { Col, Row, Rate, Divider, Select } from 'antd';
 import ReactWordcloud from 'react-wordcloud';
 import { StarFilled } from '@ant-design/icons';
-import { BarChart, Bar, CartesianGrid, XAxis, YAxis, Cell, PieChart, Pie, Tooltip, Legend } from 'recharts';
+import { BarChart, Bar, CartesianGrid, XAxis, YAxis, Cell, PieChart, Pie, Legend } from 'recharts';
 import Review from '../components/Review';
 
 function Dashboard() {
@@ -44,7 +44,6 @@ function Dashboard() {
   };
 
   const [restaurant, setRestaurant] = useState([]);
-  const [reviewDates, setReviewDates] = useState([]);
   const [reviewCount, setReviewCount] = useState([
     {name: '1', number: 0, percentage: 0, color: "#E26868"},
     {name: '2', number: 0, percentage: 0, color: "#FF8787"},
@@ -52,7 +51,6 @@ function Dashboard() {
     {name: '4', number: 0, percentage: 0, color: "#C7F2A4"},
     {name: '5', number: 0, percentage: 0, color: "#B6E388"}
   ]);
-
 
   useEffect(()=>{
     fetch(`http://localhost:5000/reviews?business_id=${location.state.business_id}`,{
@@ -64,16 +62,12 @@ function Dashboard() {
     .then(response => response.json())
     .then(response => {
 
-      setRestaurant(response)
+      console.log("USE EFFECT")
 
       let one = 0; let two = 0; let three = 0; let four = 0; let five = 0;
-      let time;
-      let reviewDatesArr = [];
+
       if (response && response.reviews) {
         for (let i = 0; i < response.reviews.length; i++) {
-          
-          time = Date.parse(response.reviews[i].date)
-          reviewDatesArr.push({x: time, y: parseInt(response.reviews[i].stars)})
 
           switch (response.reviews[i].stars) {
             case "1":
@@ -91,14 +85,20 @@ function Dashboard() {
             case "5":
               five++
               break
+            default:
+              break
           }
         }
       }
 
+      // Sort reviews by most positive
+      response.reviews.sort((a, b) => {
+        return parseFloat(b.prob_pos) - parseFloat(a.prob_pos);
+      });
+
+      setRestaurant(response)
+
       let all = one + two + three + four + five;
-
-      setReviewDates(reviewDatesArr)
-
       setReviewCount([
         {name: '1', number: one, percentage: one / all, color: "#E26868"},
         {name: '2', number: two, percentage: two / all, color: "#FF8787"},
@@ -111,7 +111,27 @@ function Dashboard() {
   },[])
 
   const handleChange = (value) => {
-    console.log(`selected ${value}`);
+    let restaurantTemp = { ...restaurant };
+    let arr = restaurantTemp.reviews;
+
+    if (value === "positive") {
+      console.log("positive")
+      arr.sort((a, b) => {
+        return parseFloat(b.prob_pos) - parseFloat(a.prob_pos);
+      });
+    }
+    else if (value === "negative") {
+      console.log("negative")
+      arr.sort((a, b) => {
+        return parseFloat(b.prob_neg) - parseFloat(a.prob_neg);
+      });
+    }
+    else {
+      console.log("Error: Invalid value selected in dropdown.")
+    }
+    
+    restaurantTemp.reviews = arr;
+    setRestaurant(restaurantTemp);
   };
 
   return (
@@ -136,7 +156,7 @@ function Dashboard() {
           <Row style={{display: "flex", alignItems: "center"}}>
             Sort reviews by:
             <Select
-              defaultValue="negative"
+              defaultValue="positive"
               style={{ width: 200, marginLeft: 10 }}
               onChange={handleChange}
               options={[
@@ -168,7 +188,7 @@ function Dashboard() {
         </Row>
           <Row>
             <Col span={24} style={{maxHeight: "400px", overflowY: "scroll", scrollbarWidth: "qem"}}>
-              {restaurant && restaurant.reviews && restaurant.reviews.map((review) => <Review review={review}/>)}
+              {restaurant && restaurant.reviews && restaurant.reviews.map((review) => <Review review={review} />)}
             </Col>
           </Row>
         </Col>
@@ -213,7 +233,7 @@ function Dashboard() {
             <h3>Word clouds</h3>
           </Row>
           <Row>
-            <ReactWordcloud words={restaurant.reviews !== undefined ? restaurant.counts_negative : []} options={wordcloudOptionsPositive} />
+            <ReactWordcloud words={restaurant.reviews !== undefined ? restaurant.counts_positive : []} options={wordcloudOptionsPositive} />
           </Row>
           <Row>
             <ReactWordcloud words={restaurant.reviews !== undefined ? restaurant.counts_positive : []} options={wordcloudOptionsNegative} />
