@@ -7,6 +7,7 @@ import string
 from collections import Counter
 
 nltk.download("stopwords")
+nltk.download("punkt")
 
 # Create an application instance
 app = create_app()
