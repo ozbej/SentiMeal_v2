@@ -2,6 +2,10 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## **Pre-Setup**
+
+install node.js to be able to use **npm**
+
 ## Project setup
 1. Navigate into project root (`...\sentimeal-app\`)
 2. Install required packages with `npm install` or `npm install -g npm` from cmd and then `rm -rf node_modules` & `npm install` in git bash

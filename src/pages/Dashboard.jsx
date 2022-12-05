@@ -110,7 +110,7 @@ function Dashboard() {
     .catch(error => console.log(error))
   },[])
 
-  const handleChange = (value) => {
+  const sortReviews = (value) => {
     let restaurantTemp = { ...restaurant };
     let arr = restaurantTemp.reviews;
 
@@ -158,7 +158,7 @@ function Dashboard() {
             <Select
               defaultValue="positive"
               style={{ width: 200, marginLeft: 10 }}
-              onChange={handleChange}
+              onChange={sortReviews}
               options={[
                 {
                   value: 'positive',
