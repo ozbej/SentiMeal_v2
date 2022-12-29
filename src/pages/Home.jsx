@@ -4,7 +4,7 @@ import { Wrapper, Status } from "@googlemaps/react-wrapper";
 import Map from "../components/Map";
 import { useLoadScript } from "@react-google-maps/api";
 
-function Home() {
+export default function Home() {
 
     const render = (status) => {
         return <h1>{status}</h1>;
@@ -35,23 +35,24 @@ function Home() {
         })
         .catch(error => console.log(error))
       },[]) */
-    const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-    libraries: ["places"],
-    });
-    if (!isLoaded) return <div>Loading...</div>;
+
+      const { isLoaded } = useLoadScript({
+        googleMapsApiKey: "AIzaSyAJA0KO_kEJ2RMOeWIMosfsAGS_8HpgCDg",
+        libraries: ["places"]
+      })
+    if (!isLoaded) return <div>Loading...</div>
     return (
         <>
             <Row>
                 <Col span={24}>
                     <h1 style={{textAlign:"center"}}>Home page</h1>
                     
-                        <Map />
+                    <Map />
                     
                 </Col>
+                
             </Row>
+            
         </>
     );
 }
-
-export default Home;

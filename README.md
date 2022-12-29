@@ -8,7 +8,7 @@ install node.js to be able to use **npm**
 
 ## Project setup
 1. Navigate into project root (`...\sentimeal-app\`)
-2. Install required packages with `npm install` or `npm install -g npm` from cmd and then `rm -rf node_modules` & `npm install` in git bash
+2. Install required packages with `npm install` or `npm install -g npm` from cmd and then `rm -rf node_modules` & `npm install --legacy-peer-deps` in git bash
 3. Navigate to api folder with `cd api`
 4. Install required packages with `pip install -r requirements.txt`
 
