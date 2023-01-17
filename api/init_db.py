@@ -1,14 +1,14 @@
 import sqlite3
 import pandas as pd
 
-connection = sqlite3.connect('data/database.db')
+connection = sqlite3.connect('data/database_graz.db')
 
 with open('schema.sql') as f:
     connection.executescript(f.read())
 
 cur = connection.cursor()
 
-df = pd.read_csv('data/yelp_reviews_restaurants_test.csv')
+df = pd.read_csv('data/graz_reviews_restaurants_test.csv')
 
 # Insert into "restaurants" table
 df_groups = df.groupby("business_id")

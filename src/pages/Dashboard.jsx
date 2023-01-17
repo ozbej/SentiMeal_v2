@@ -62,27 +62,27 @@ function Dashboard() {
     .then(response => response.json())
     .then(response => {
 
-      console.log("USE EFFECT")
-
       let one = 0; let two = 0; let three = 0; let four = 0; let five = 0;
 
+      let star = 0;
       if (response && response.reviews) {
         for (let i = 0; i < response.reviews.length; i++) {
+          star = parseInt(response.reviews[i].stars);
 
-          switch (response.reviews[i].stars) {
-            case "1":
+          switch (star) {
+            case 1:
               one++
               break
-            case "2":
+            case 2:
               two++
               break
-            case "3":
+            case 3:
               three++
               break
-            case "4":
+            case 4:
               four++
               break
-            case "5":
+            case 5:
               five++
               break
             default:

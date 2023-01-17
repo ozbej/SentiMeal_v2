@@ -54,8 +54,8 @@ def reviews_by_id():
 		# Generate data for wordcloud
 		filtered_text = [w for w in word_tokenize(review.text) if not w.lower() in stop_words and not w.lower() in string.punctuation]
 
-		if int(review.sentiment) == 0: negative_text += filtered_text
-		elif int(review.sentiment) == 2: positive_text += filtered_text
+		if int(float(review.sentiment)) == 0: negative_text += filtered_text
+		elif int(float(review.sentiment)) == 2: positive_text += filtered_text
 
 		counts_negative = [{"text": k, "value": v} for k, v in Counter(negative_text).items()]
 		counts_positive= [{"text": k, "value": v} for k, v in Counter(positive_text).items()]
