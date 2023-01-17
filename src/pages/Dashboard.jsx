@@ -115,13 +115,11 @@ function Dashboard() {
     let arr = restaurantTemp.reviews;
 
     if (value === "positive") {
-      console.log("positive")
       arr.sort((a, b) => {
         return parseFloat(b.prob_pos) - parseFloat(a.prob_pos);
       });
     }
     else if (value === "negative") {
-      console.log("negative")
       arr.sort((a, b) => {
         return parseFloat(b.prob_neg) - parseFloat(a.prob_neg);
       });

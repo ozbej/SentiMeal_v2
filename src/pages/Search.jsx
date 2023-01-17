@@ -11,7 +11,6 @@ function SearchPage() {
     const [restaurants, setRestaurants] = useState([]);
 
     const onSearch = (value) => {
-        console.log(value);
         navigate('/dashboard', {state:{business_id:value}});
     };
 
@@ -31,7 +30,6 @@ function SearchPage() {
             }))
 
             setRestaurants(restaurantArr)
-            console.log(restaurantArr)
         })
         .catch(error => console.log(error))
       },[])
@@ -57,7 +55,6 @@ function SearchPage() {
                         placeholder="Select a restaurant"
                         optionFilterProp="children"
                         onChange={onSearch}
-                        onSearch={onSearch}
                         filterOption={(input, option) =>
                         (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
