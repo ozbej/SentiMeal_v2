@@ -1,6 +1,7 @@
 import React from "react";
 import {useState, useRef, useEffect, useMemo, useCallback} from "react";
-import { GoogleMap, useJsApiLoader,  Marker, DirectionsRenderer, Circle, MarkerClusterer, } from '@react-google-maps/api';
+import { GoogleMap, useJsApiLoader,  Marker, MarkerClusterer, InfoWindow } from '@react-google-maps/api';
+import  { useNavigate  } from 'react-router-dom';
 
 const containerStyle = {
   width: '100%',
@@ -9,9 +10,9 @@ const containerStyle = {
 
 
 function Map() {
-
-  const [office, setOffice] = useState()
-  const [directions, setDirections] = useState()
+  const navigate = useNavigate();
+  const [restaurants, setRestaurants] = useState([]);
+  const [activeMarker, setActiveMarker] = useState(null);
   const mapRef = useRef()
   const center = useMemo(() => ({ lat: 47.066668, lng: 15.441371 }), [])
   const options = useMemo(
@@ -23,25 +24,52 @@ function Map() {
     []
   )
 
+  const onVisitDashboard = (value) => {
+    navigate('/dashboard', {state:{business_id:value}});
+  };
+
+  const handleActiveMarker = (marker) => {
+    if (marker === activeMarker) {
+      return;
+    }
+    setActiveMarker(marker);
+  };
+
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: "AIzaSyAJA0KO_kEJ2RMOeWIMosfsAGS_8HpgCDg"
   })
 
   const [map, setMap] = React.useState(null)
-/*
-  const onLoad = React.useCallback(function callback(map) {
-    // This is just an example of getting and using the map instance!!! don't just blindly copy!
-    const bounds = new window.google.maps.LatLngBounds(center);
-    map.fitBounds(bounds);
+  const onLoad = useCallback(map => (mapRef.current = map), [])
 
-    setMap(map)
-  }, [])
-*/
-const onLoad = useCallback(map => (mapRef.current = map), [])
-const restaurants = useMemo(() => generateRestaurants(center), [center])
+  const onUnmount = React.useCallback(function callback(map) {setMap(null)}, [])
 
-const onUnmount = React.useCallback(function callback(map) {setMap(null)}, [])
+  useEffect(()=>{
+    fetch("http://localhost:5000/restaurants",{
+      'methods':'GET',
+      headers : {
+        'Content-Type':'application/json'
+      }
+    })
+    .then(response => response.json())
+    .then(response => {
+        let restaurantArr = [];
+        response && response.map((restaurant, index) => {
+          let position = restaurant.latitude.split(",");
+          restaurantArr.push({
+            business_id: restaurant.business_id,
+            name: restaurant.name,
+            lat: parseFloat(position[0]),
+            lng: parseFloat(position[1]),
+            stars: restaurant.stars
+          })
+        })
+
+        setRestaurants(restaurantArr);
+    })
+    .catch(error => console.log(error))
+  },[])
 
 
   return isLoaded ? (
@@ -52,77 +80,45 @@ const onUnmount = React.useCallback(function callback(map) {setMap(null)}, [])
         onLoad={onLoad}
         options={options}
         onUnmount={onUnmount}
+        onClick={() => setActiveMarker(null)}
       >
         { /* Child components, such as markers, info windows, etc. */ 
          (
-          <>
-            
+          <>            
             <MarkerClusterer>
               {clusterer =>
                 restaurants.map(restaurant => (
-                  <><Marker
-                    key={restaurant.lat}
-                    position={restaurant}
-                    clusterer={clusterer} />
-                    <Circle center={restaurant} radius={500} options={goodOptions} />
-                    </>
+                  <>
+                    <Marker
+                      key={restaurant.business_id}
+                      position={{lat: restaurant.lat, lng: restaurant.lng}}
+                      clusterer={clusterer}
+                      onClick={() => handleActiveMarker(restaurant.business_id)}
+                    >
+                      {activeMarker === restaurant.business_id ? (
+                        <InfoWindow onCloseClick={() => setActiveMarker(null)}>
+                          <div style={{display: "flex", flexDirection: "column"}}>
+                            { restaurant.name }
+                            <span>Stars: { restaurant.stars }</span>
+                            <a href="#" 
+                            onClick={() => {onVisitDashboard(restaurant.business_id); return false;}}>
+                              Visit Restaurant Dashboard</a>
+                          </div>
+                        </InfoWindow>
+                      ) : null}
+                    </Marker>
+                    {/*<Circle center={restaurant} radius={500} options={goodOptions} />*/}
+                  </>
             
                 ))
               }
-            </MarkerClusterer>
-
-            
-            
-            
+            </MarkerClusterer>    
           </>
         )
         }
         <></>
       </GoogleMap>
   ) : <></>
-}
-
-const defaultOptions = {
-  strokeOpacity: 0.5,
-  strokeWeight: 2,
-  clickable: false,
-  draggable: false,
-  editable: false,
-  visible: true
-}
-
-const goodOptions = {
-  ...defaultOptions,
-  zIndex: 3,
-  fillOpacity: 0.05,
-  strokeColor: "#8BC34A",
-  fillColor: "#8BC34A"
-}
-const middleOptions = {
-  ...defaultOptions,
-  zIndex: 2,
-  fillOpacity: 0.05,
-  strokeColor: "#FBC02D",
-  fillColor: "#FBC02D"
-}
-const badOptions = {
-  ...defaultOptions,
-  zIndex: 1,
-  fillOpacity: 0.05,
-  strokeColor: "#FF5252",
-  fillColor: "#FF5252"
-}
-
-const generateRestaurants = position => {
-  const _restaurants = []
-  for (let i = 0; i < 100; i++) {
-    const direction = Math.random() < 0.5 ? -2 : 2
-    _restaurants.push({
-      lat: position.lat + Math.random() * 0.1 / direction,
-      lng: position.lng + Math.random() * 0.1 / direction
-    })
-  }
-  return _restaurants
 }
 
 export default React.memo(Map)
