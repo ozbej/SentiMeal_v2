@@ -5,6 +5,7 @@ import nltk
 from nltk.tokenize import word_tokenize
 import string
 from collections import Counter
+from waitress import serve
 
 nltk.download("stopwords")
 nltk.download("punkt")
@@ -69,4 +70,5 @@ def reviews_by_id():
 
 
 if __name__ == "__main__":
-	app.run(debug=True)
+	print("Server started")
+	serve(app, host='0.0.0.0', port=8080, threads=1) #WAITRESS!

@@ -21,3 +21,4 @@ install node.js to be able to use **npm**
 ### Run backend server
 3. Navigate into project root (`...\sentimeal-app\`)
 2. Run `yarn start-api` to run the flask server. Alternatively navigate to `...\api\` and run `python -m flask run --no-debugger`
+ll

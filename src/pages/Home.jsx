@@ -9,33 +9,6 @@ export default function Home() {
     const render = (status) => {
         return <h1>{status}</h1>;
     };
-/*
-    const [restaurants, setRestaurants] = useState([]);
-
-    useEffect(()=>{
-        fetch("http://localhost:5000/restaurants",{
-          'methods':'GET',
-          headers : {
-            'Content-Type':'application/json'
-          }
-        })
-        .then(response => response.json())
-        .then(response => {
-            let restaurantArr = [];
-
-            response && response.map(restaurant => restaurantArr.push({
-                businessId: restaurant.business_id,
-                name: restaurant.name,
-                longitude: restaurant.longitude,
-                latitude: restaurant.latitude
-            }))
-
-            setRestaurants(restaurantArr)
-            console.log(restaurantArr)
-        })
-        .catch(error => console.log(error))
-      },[]) */
-
       const { isLoaded } = useLoadScript({
         googleMapsApiKey: "AIzaSyAJA0KO_kEJ2RMOeWIMosfsAGS_8HpgCDg",
         libraries: ["places"]

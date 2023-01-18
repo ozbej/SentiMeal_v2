@@ -46,7 +46,7 @@ function Map() {
   const onUnmount = React.useCallback(function callback(map) {setMap(null)}, [])
 
   useEffect(()=>{
-    fetch("http://localhost:5000/restaurants",{
+    fetch("http://193.170.227.246:8080/restaurants",{
       'methods':'GET',
       headers : {
         'Content-Type':'application/json'
