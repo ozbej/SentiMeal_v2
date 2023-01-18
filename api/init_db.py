@@ -8,7 +8,7 @@ with open('schema.sql') as f:
 
 cur = connection.cursor()
 
-df = pd.read_csv('data/graz_reviews_restaurants_test.csv')
+df = pd.read_csv('data/graz_reviews_restaurants.csv')
 
 # Insert into "restaurants" table
 df_groups = df.groupby("business_id")

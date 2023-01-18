@@ -53,7 +53,7 @@ function Dashboard() {
   ]);
 
   useEffect(()=>{
-    fetch(`http://193.170.227.246:8080/reviews?business_id=${location.state.business_id}`,{
+    fetch(`http://localhost:5000/reviews?business_id=${location.state.business_id}`,{
       'methods':'GET',
       headers : {
         'Content-Type':'application/json'
