@@ -17,7 +17,6 @@ function Map() {
   const center = useMemo(() => ({ lat: 47.066668, lng: 15.441371 }), [])
   const options = useMemo(
     () => ({
-      mapId: "b181cac70f27f5e6",
       disableDefaultUI: true,
       clickableIcons: false
     }),
@@ -107,7 +106,6 @@ function Map() {
                         </InfoWindow>
                       ) : null}
                     </Marker>
-                    {/*<Circle center={restaurant} radius={500} options={goodOptions} />*/}
                   </>
             
                 ))
