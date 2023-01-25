@@ -1,6 +1,6 @@
 import React from "react";
 import {useState, useRef, useEffect, useMemo, useCallback} from "react";
-import { GoogleMap, useJsApiLoader,  Marker, MarkerClusterer, InfoWindow } from '@react-google-maps/api';
+import { GoogleMap, useJsApiLoader,  Marker, MarkerClusterer, Circle, InfoWindow } from '@react-google-maps/api';
 import  { useNavigate  } from 'react-router-dom';
 
 const containerStyle = {
@@ -93,8 +93,17 @@ function Map() {
                       position={{lat: restaurant.lat, lng: restaurant.lng}}
                       clusterer={clusterer}
                       onClick={() => handleActiveMarker(restaurant.business_id)}
+                      
                     >
-                      {activeMarker === restaurant.business_id ? (
+                      {restaurant.stars >= 4 ? (
+                      <Circle center={position} radius={200} options={goodOptions} />
+                    ) : restaurant.stars >= 2 ? (
+                      <Circle center={position} radius={200} options={middleOptions} />
+                    ) : (
+                      <Circle center={position} radius={200} options={badOptions} />
+                    )}
+                      { 
+                      activeMarker === restaurant.business_id ? (
                         <InfoWindow onCloseClick={() => setActiveMarker(null)}>
                           <div style={{display: "flex", flexDirection: "column"}}>
                             { restaurant.name }
@@ -117,6 +126,37 @@ function Map() {
         <></>
       </GoogleMap>
   ) : <></>
+}
+
+const defaultOptions = {
+  strokeOpacity: 0.5,
+  strokeWeight: 2,
+  clickable: false,
+  draggable: false,
+  editable: false,
+  visible: true
+}
+
+const goodOptions = {
+  ...defaultOptions,
+  zIndex: 3,
+  fillOpacity: 0.05,
+  strokeColor: "#8BC34A",
+  fillColor: "#8BC34A"
+}
+const middleOptions = {
+  ...defaultOptions,
+  zIndex: 2,
+  fillOpacity: 0.05,
+  strokeColor: "#FBC02D",
+  fillColor: "#FBC02D"
+}
+const badOptions = {
+  ...defaultOptions,
+  zIndex: 1,
+  fillOpacity: 0.05,
+  strokeColor: "#FF5252",
+  fillColor: "#FF5252"
 }
 
 export default React.memo(Map)
