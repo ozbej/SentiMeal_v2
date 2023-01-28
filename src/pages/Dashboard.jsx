@@ -8,7 +8,6 @@ import Review from '../components/Review';
 
 function Dashboard() {
 
-
   const location = useLocation();
 
   const wordcloudOptionsPositive = {
@@ -53,7 +52,8 @@ function Dashboard() {
   ]);
 
   useEffect(()=>{
-    fetch(`http://164.8.213.166:8080/reviews?business_id=${location.state.business_id}`,{
+    console.log("Component reloaded.")
+    fetch(`http://127.0.0.1:5000/reviews?business_id=${location.state.business_id}`,{
       'methods':'GET',
       headers : {
         'Content-Type':'application/json'

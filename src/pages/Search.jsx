@@ -15,7 +15,7 @@ function SearchPage() {
     };
 
     useEffect(()=>{
-        fetch("http://164.8.213.166:8080/restaurants",{
+        fetch("http://127.0.0.1:5000/restaurants",{
           'methods':'GET',
           headers : {
             'Content-Type':'application/json'

@@ -45,7 +45,7 @@ function Map() {
   const onUnmount = React.useCallback(function callback(map) {setMap(null)}, [])
 
   useEffect(()=>{
-    fetch("http://164.8.213.166:8080/restaurants",{
+    fetch("http://127.0.0.1:5000/restaurants",{
       'methods':'GET',
       headers : {
         'Content-Type':'application/json'
@@ -95,25 +95,18 @@ function Map() {
                       onClick={() => handleActiveMarker(restaurant.business_id)}
                       
                     >
-                      {restaurant.stars >= 4 ? (
-                      <Circle center={position} radius={200} options={goodOptions} />
-                    ) : restaurant.stars >= 2 ? (
-                      <Circle center={position} radius={200} options={middleOptions} />
-                    ) : (
-                      <Circle center={position} radius={200} options={badOptions} />
-                    )}
-                      { 
-                      activeMarker === restaurant.business_id ? (
-                        <InfoWindow onCloseClick={() => setActiveMarker(null)}>
-                          <div style={{display: "flex", flexDirection: "column"}}>
-                            { restaurant.name }
-                            <span>Stars: { restaurant.stars }</span>
-                            <a href="#" 
-                            onClick={() => {onVisitDashboard(restaurant.business_id); return false;}}>
-                              Visit Restaurant Dashboard</a>
-                          </div>
-                        </InfoWindow>
-                      ) : null}
+                    { 
+                    activeMarker === restaurant.business_id ? (
+                      <InfoWindow onCloseClick={() => setActiveMarker(null)}>
+                        <div style={{display: "flex", flexDirection: "column"}}>
+                          { restaurant.name }
+                          <span>Stars: { restaurant.stars }</span>
+                          <a href="#" 
+                          onClick={() => {onVisitDashboard(restaurant.business_id); return false;}}>
+                            Visit Restaurant Dashboard</a>
+                        </div>
+                      </InfoWindow>
+                    ) : null}
                     </Marker>
                   </>
             
